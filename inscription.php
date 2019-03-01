@@ -61,8 +61,8 @@ if ($_POST) {
          * Inscription dans la BDD
          */
         $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $pdo_connexion->query("INSERT INTO auteur (PRENOMAUTEUR, NOMAUTEUR, EMAILAUTEUR, PASSWORDAUTEUR) 
-            VALUES ('$_POST[prenom]', '$_POST[nom]', '$_POST[email]', '$_POST[password]')");
+        $pdo_connexion->query("INSERT INTO auteur (PRENOMAUTEUR, NOMAUTEUR, EMAILAUTEUR, PASSWORDAUTEUR, ROLE) 
+            VALUES ('$_POST[prenom]', '$_POST[nom]', '$_POST[email]', '$_POST[password]', 'ROLE_MEMBRE')");
     }
 
     // -- 4. Sinon on affiche l'erreur

@@ -32,6 +32,7 @@ if ($request->rowCount() <= 0) {
         $page_content .= '<div class="col-sm-4 mb-4">
                               <div class="card">
                                   <div class="card-body">
+                                    <img class="card-img-top" src="./assets/images/'. $article['FEATUREDIMAGEARTICLE'] .'" alt="Card image cap">
                                     <h5 class="card-title">' . $article['TITREARTICLE'] . '</h5>
                                     <a href="article.php?id_article='.$article['IDARTICLE'].'" class="btn btn-primary">Consulter</a>
                                   </div>

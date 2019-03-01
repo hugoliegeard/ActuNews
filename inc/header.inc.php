@@ -38,6 +38,12 @@
                             <a class="nav-link"
                                href="<?= URL_SITE ?>/categorie.php?id_categorie=3&&nom_categorie=sport">Sport</a>
                         </li>
+                        <?php if (utilisateurEstConnecteEtEstAdmin()) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="<?= URL_SITE ?>/admin/rediger-un-article.php">Rédiger un Article</a>
+                            </li>
+                        <?php endif; ?>
                         <?php if (utilisateurEstConnecte()) : ?>
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= URL_SITE ?>/deconnexion.php">Déconnexion</a>

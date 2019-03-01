@@ -23,6 +23,7 @@ if ($_POST) {
             $_SESSION['membre']['nom'] = $membre['NOMAUTEUR'];
             $_SESSION['membre']['prenom'] = $membre['PRENOMAUTEUR'];
             $_SESSION['membre']['email'] = $membre['EMAILAUTEUR'];
+            $_SESSION['membre']['role'] = $membre['ROLE'];
 
             header('location:index.php');
         } else {
