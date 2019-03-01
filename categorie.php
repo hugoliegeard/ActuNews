@@ -33,7 +33,7 @@ if ($request->rowCount() <= 0) {
                               <div class="card">
                                   <div class="card-body">
                                     <h5 class="card-title">' . $article['TITREARTICLE'] . '</h5>
-                                    <a href="#" class="btn btn-primary">Consulter</a>
+                                    <a href="article.php?id_article='.$article['IDARTICLE'].'" class="btn btn-primary">Consulter</a>
                                   </div>
                               </div>     		
                           </div>';
