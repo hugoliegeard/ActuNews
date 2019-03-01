@@ -48,6 +48,13 @@ if ($_POST) {
         fwrite($fichier, $_POST['prenom'] . " " . $_POST['nom'] . " - ");
         fwrite($fichier, $_POST['email'] . "\n");
         $fichier = fclose($fichier);
+
+        /*
+         * Inscription dans la BDD
+         */
+        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $pdo_connexion->query("INSERT INTO auteur (PRENOMAUTEUR, NOMAUTEUR, EMAILAUTEUR, PASSWORDAUTEUR) 
+            VALUES ('$_POST[prenom]', '$_POST[nom]', '$_POST[email]', '$_POST[password]')");
     }
 
     // -- 4. Sinon on affiche l'erreur
