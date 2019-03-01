@@ -20,3 +20,9 @@ $pdo_connexion = new PDO('mysql:host=localhost;dbname=technews',
 
 // -- -------------------- | VARIABLES | --------------------- -- //
 $page_content = '';
+
+// -- -------------------- | FONCTIONS UTILES | --------------------- -- //
+require_once('functions.inc.php');
+
+// -- -------------------- | LES SESSIONS PHP | --------------------- -- //
+session_start();

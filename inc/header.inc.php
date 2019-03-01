@@ -21,26 +21,41 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="<?= URL_SITE ?>/index.php">Accueil <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="<?= URL_SITE ?>/index.php">Accueil <span
+                                        class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= URL_SITE ?>/categorie.php?id_categorie=1&nom_categorie=politique">Politique</a>
+                            <a class="nav-link"
+                               href="<?= URL_SITE ?>/categorie.php?id_categorie=1&nom_categorie=politique">Politique</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= URL_SITE ?>/categorie.php?id_categorie=2&nom_categorie=economie">Economie</a>
+                            <a class="nav-link"
+                               href="<?= URL_SITE ?>/categorie.php?id_categorie=2&nom_categorie=economie">Economie</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= URL_SITE ?>/categorie.php?id_categorie=3&&nom_categorie=sport">Sport</a>
+                            <a class="nav-link"
+                               href="<?= URL_SITE ?>/categorie.php?id_categorie=3&&nom_categorie=sport">Sport</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= URL_SITE ?>/connexion.php">Connexion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= URL_SITE ?>/inscription.php">Inscription</a>
-                        </li>
+                        <?php if (utilisateurEstConnecte()) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= URL_SITE ?>/deconnexion.php">Déconnexion</a>
+                            </li>
+                        <?php else : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= URL_SITE ?>/connexion.php">Connexion</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= URL_SITE ?>/inscription.php">Inscription</a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
+                    <?php if (utilisateurEstConnecte()) : ?>
+                        <span class="navbar-text">
+                            Bonjour <strong><?= $_SESSION['membre']['prenom']; ?></strong> !
+                        </span>
+                    <?php endif; ?>
                 </div>
             </nav>
         </div> <!-- /.col -->
