@@ -13,3 +13,6 @@ define("RACINE_SITE", $_SERVER['DOCUMENT_ROOT'] . '/php2019/technews');
 
 //echo 'url : ' . URL_SITE . '<br>';
 //echo 'racine : ' . RACINE_SITE . '<br>';
+
+// -- -------------------- | VARIABLES | --------------------- -- //
+$page_content = '';

@@ -12,7 +12,7 @@
 <body>
 
 <div class="container">
-    <div class="row">
+    <div class="row mb-4">
         <div class="col">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a class="navbar-brand" href="<?= URL_SITE ?>/index.php">ActuNews</a>
@@ -33,6 +33,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= URL_SITE ?>/categorie.php?id_categorie=3&&nom_categorie=sport">Sport</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= URL_SITE ?>/connexion.php">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= URL_SITE ?>/inscription.php">Inscription</a>
                         </li>
                     </ul>
                 </div>
