@@ -9,12 +9,11 @@ if ($_POST) {
     var_dump($_POST);
 
     // -- 1b. Recupération des saisies en PHP via une boucle :
-     foreach($_POST as $indice => $saisie)
-     {
+    foreach ($_POST as $indice => $saisie) {
         echo $indice . " : " . $saisie . "<br />";
-     }
+    }
 
-    // -- 2. Vérification des champs
+    // -- 2a. Vérification des champs
     $erreur = '';
     if (empty($_POST['prenom'])
         || empty($_POST['nom'])
@@ -23,6 +22,12 @@ if ($_POST) {
         $erreur .= '<div class="alert alert-danger" role="alert">
                         Vous devez remplir tous les champs. Vérifiez vos informations.
                     </div>';
+    }
+
+    // -- 2b. Vérification si le membre existe déjà.
+    $request = $pdo_connexion->query("SELECT * FROM auteur WHERE EMAILAUTEUR = '$_POST[email]'");
+    if ($request->rowCount() >= 1) {
+        $erreur .= '<div class="alert alert-danger" role="alert">Oops, ce membre est déjà inscrit.</div>';
     }
 
     // -- 3. S'il n'y a pas d'erreur, on procède à l'inscription.
@@ -47,7 +52,7 @@ if ($_POST) {
         // -- "\n" entre guillemets permet de sauter une ligne dans un fichier.
         // -- "fclose()" n'est pas indispensable mais permet de fermer le fichier et ainsi libérer la ressource.
 
-        $fichier = fopen("inscription.txt","a");
+        $fichier = fopen("inscription.txt", "a");
         fwrite($fichier, $_POST['prenom'] . " " . $_POST['nom'] . " - ");
         fwrite($fichier, $_POST['email'] . "\n");
         $fichier = fclose($fichier);
