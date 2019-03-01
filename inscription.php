@@ -29,7 +29,10 @@ if ($_POST) {
     if (empty($erreur)) {
 
         // -- Affichage d'une alerte
-        $page_content .= '<div class="alert alert-success" role="alert">Félicitation, vous êtes inscrit !</div>';
+        $page_content .= '<div class="alert alert-success" role="alert">
+                                Félicitation, vous êtes inscrit ! <br>
+                                <a href="connexion.php">Vous pouvez vous connecter.</a>
+                            </div>';
 
         /*
          * Inscription dans un fichier texte créé dynamiquement.
