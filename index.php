@@ -1,3 +1,4 @@
+<?php require_once('inc/init.inc.php'); ?>
 <?php require_once('inc/header.inc.php'); ?>
 
 <div class="container">

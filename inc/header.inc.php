@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">ActuNews</a>
+                <a class="navbar-brand" href="<?= URL_SITE ?>/index.php">ActuNews</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                         aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,16 +23,16 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Accueil <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="<?= URL_SITE ?>/index.php">Accueil <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Politique</a>
+                            <a class="nav-link" href="<?= URL_SITE ?>/categorie.php?id_categorie=1&nom_categorie=politique">Politique</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Economie</a>
+                            <a class="nav-link" href="<?= URL_SITE ?>/categorie.php?id_categorie=2&nom_categorie=economie">Economie</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Sport</a>
+                            <a class="nav-link" href="<?= URL_SITE ?>/categorie.php?id_categorie=3&&nom_categorie=sport">Sport</a>
                         </li>
                     </ul>
                 </div>
