@@ -1,9 +1,28 @@
 <?php
 
+// Démarrage de la session PHP.
+session_start();
+
 /*
     Nous pourrons définir ici toutes les fonctions utiles
     à notre projet et utilisable sur toutes les pages.
 */
+
+/**
+ * Permet de rediriger un utilisateur
+ * sur une nouvelle page.
+ */
+function redirection($page) {
+    header('Location: ' . $page);
+}
+
+/**
+ * Permet de vérifier si un auteur
+ * est connecté en session.
+ */
+function isOnline() {
+    return isset($_SESSION['auteur']) ? $_SESSION['auteur'] : false;
+}
 
 /**
  * Permet de générer une accroche / un résumé.

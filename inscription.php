@@ -39,8 +39,13 @@ if(!empty($_POST)) {
     }
 
     if(empty($errors)) {
+        
         // -- Je procède à l'inscription en base.
-        // -- Puis redirection sur la page de connexion.
+        if(inscription($prenom, $nom, $email, $password)) {
+            // -- Puis redirection sur la page de connexion.
+            redirection('connexion.php?inscription=success&email=' . $email);
+        }
+
     }
 
 }

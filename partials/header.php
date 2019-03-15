@@ -8,10 +8,14 @@
     // Inclusion de nos fonctions.
     require_once(__DIR__.'/../functions/categorie.php');
     require_once(__DIR__.'/../functions/article.php');
+    require_once(__DIR__.'/../functions/auteur.php');
     
     // Récupération des catégories de la base
     // $categories = ['Politique', 'Economie', 'Culture', 'Sports'];
     $categories = getCategories();
+
+    // Si un auteur est en session, alors $auteur prendra comme valeur le tableau d'auteur. Sinon, $auteur prendra comme valeur false.
+    $auteur = isOnline();
     
 ?>
 <!DOCTYPE html>
@@ -55,8 +59,16 @@
         <ul class="navbar-nav mx-auto"></ul>
 
         <ul class="navbar-nav justify-content-end">
-            <a class="nav-item btn btn-outline-dark mx-1 navbar-right" href="connexion.php">Connexion</a>
-            <a class="nav-item btn btn-outline-dark mx-1 navbar-right" href="inscription.php">Inscription</a>
+            <?php if ($auteur) { ?>
+                <span class="navbar-text mx-2">
+                    Bonjour <strong><?= $auteur['prenom'] ?></strong>
+                </span>
+                <a class="nav-item btn btn-outline-dark mx-1 navbar-right" href="mes-articles.php">Mes Articles</a>
+                <a class="nav-item btn btn-outline-dark mx-1 navbar-right" href="deconnexion.php">Déconnexion</a>
+            <?php } else { ?>
+                <a class="nav-item btn btn-outline-dark mx-1 navbar-right" href="connexion.php">Connexion</a>
+                <a class="nav-item btn btn-outline-dark mx-1 navbar-right" href="inscription.php">Inscription</a>
+            <?php } ?>
         </ul>
 
 
