@@ -1,120 +1,114 @@
-<?php require_once('inc/init.inc.php'); ?>
-
-<!-- ----------------------------- | TRAITEMENT | ------------------------------ -->
-
 <?php
-if ($_POST) {
+// Inclusion de header.php sur la page.
+require_once(__DIR__.'/partials/header.php');
 
-    // -- 1a. Récupération des données POST
-    var_dump($_POST);
+$prenom = $nom = $email = $password = $cfPassword = null;
 
-    // -- 1b. Recupération des saisies en PHP via une boucle :
-    foreach ($_POST as $indice => $saisie) {
-        echo $indice . " : " . $saisie . "<br />";
+if(!empty($_POST)) {
+
+    $prenom     = $_POST['prenom']; 
+    $nom        = $_POST['nom']; 
+    $email      = $_POST['email']; 
+    $password   = $_POST['password']; 
+    $cfPassword = $_POST['cf-password']; 
+
+    $errors = [];
+
+    if(empty($prenom)) {
+        $errors['prenom'] = 'Vous avez oublié votre prénom';
     }
 
-    // -- 2a. Vérification des champs
-    $erreur = '';
-    if (empty($_POST['prenom'])
-        || empty($_POST['nom'])
-        || empty($_POST['email'])
-        || empty($_POST['password'])) {
-        $erreur .= '<div class="alert alert-danger" role="alert">
-                        Vous devez remplir tous les champs. Vérifiez vos informations.
-                    </div>';
+    if(empty($nom)) {
+        $errors['nom'] = 'Vous avez oublié votre nom';
     }
 
-    // -- 2b. Vérification si le membre existe déjà.
-    $request = $pdo_connexion->query("SELECT * FROM auteur WHERE EMAILAUTEUR = '$_POST[email]'");
-    if ($request->rowCount() >= 1) {
-        $erreur .= '<div class="alert alert-danger" role="alert">Oops, ce membre est déjà inscrit.</div>';
+    if(empty($email)) {
+        $errors['email'] = 'Vous avez oublié votre email';
     }
 
-    // -- 3. S'il n'y a pas d'erreur, on procède à l'inscription.
-    if (empty($erreur)) {
-
-        // -- Affichage d'une alerte
-        $page_content .= '<div class="alert alert-success" role="alert">
-                                Félicitation, vous êtes inscrit ! <br>
-                                <a href="connexion.php">Vous pouvez vous connecter.</a>
-                            </div>';
-
-        /*
-         * Inscription dans un fichier texte créé dynamiquement.
-         * ------------------------------------------------------
-         * Si l'on souhaite enregistrer des membres et
-         * que l'on ne possède pas de BDD, nous pouvons
-         * le faire dans un fichier texte par exemple.
-         */
-
-        // -- "fopen()" en mode "a" permet de créer le fichier s'il n'est pas trouvé, sinon de l'ouvrir.
-        // -- "fwrite()" permet d'écrire dans le fichier représenter par la variable $fichier.
-        // -- "\n" entre guillemets permet de sauter une ligne dans un fichier.
-        // -- "fclose()" n'est pas indispensable mais permet de fermer le fichier et ainsi libérer la ressource.
-
-        $fichier = fopen("inscription.txt", "a");
-        fwrite($fichier, $_POST['prenom'] . " " . $_POST['nom'] . " - ");
-        fwrite($fichier, $_POST['email'] . "\n");
-        $fichier = fclose($fichier);
-
-        /*
-         * Inscription dans la BDD
-         */
-        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $pdo_connexion->query("INSERT INTO auteur (PRENOMAUTEUR, NOMAUTEUR, EMAILAUTEUR, PASSWORDAUTEUR, ROLE) 
-            VALUES ('$_POST[prenom]', '$_POST[nom]', '$_POST[email]', '$_POST[password]', 'ROLE_MEMBRE')");
+    if(!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Vérifiez le format de votre email';
     }
 
-    // -- 4. Sinon on affiche l'erreur
-    $page_content .= $erreur;
+    if(empty($password)) {
+        $errors['password'] = 'Vous avez oublié votre mot de passe';
+    }
+
+    if($password !== $cfPassword) {
+        $errors['password'] = 'Les mots de passe ne correspondent pas';
+    }
+
+    if(empty($errors)) {
+        // -- Je procède à l'inscription en base.
+        // -- Puis redirection sur la page de connexion.
+    }
+
 }
+
 ?>
 
-<!-- ----------------------------- | AFFICHAGE | ------------------------------ -->
-
-<?php require_once('inc/header.inc.php'); ?>
+<div class="p-3 mx-auto text-center">
+    <h1 class="display-4">Inscription</h1>
+</div>
 
 <div class="container">
     <div class="row">
-        <div class="col">
-            <h1 class="text-center">Devenir Membre</h1>
-            <h3 class="text-center">Inscription</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6">
-            <?= $page_content; ?>
-            <form novalidate method="post">
+        <div class="col-md-6 offset-md-3">
+            <form method="POST" class="form-horizontal">
                 <div class="form-group">
-                    <input type="text" name="prenom"
-                           required="required" class="form-control form-control"
-                           placeholder="Saisissez votre Prénom"/>
+                    <input type="text" 
+                        class="form-control <?= isset($errors['prenom']) ? 'is-invalid' : '' ?>"
+                        name="prenom"
+                        value="<?= $prenom ?>"
+                        placeholder="Prénom.">
+                        <div class="invalid-feedback">
+                            <?= isset($errors['prenom']) ? $errors['prenom'] : '' ?>
+                        </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="nom"
-                           required="required" class="form-control form-control"
-                           placeholder="Saisissez votre Nom"/>
+                    <input type="text" 
+                        class="form-control <?= isset($errors['nom']) ? 'is-invalid' : '' ?>"
+                        name="nom"
+                        value="<?= $nom ?>"
+                        placeholder="Nom.">
+                        <div class="invalid-feedback">
+                            <?= isset($errors['nom']) ? $errors['nom'] : '' ?>
+                        </div>
                 </div>
                 <div class="form-group">
-                    <input type="email" name="email"
-                           required="required" class="form-control form-control"
-                           placeholder="Saisissez votre Email"/>
+                    <input type="email" 
+                        class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
+                        name="email"
+                        value="<?= $email ?>"
+                        placeholder="Email.">
+                        <div class="invalid-feedback">
+                            <?= isset($errors['email']) ? $errors['email'] : '' ?>
+                        </div>
                 </div>
                 <div class="form-group">
-                    <input type="password" name="password"
-                           required="required" class="form-control form-control"
-                           placeholder="*******"/>
+                    <input type="password" 
+                        class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
+                        name="password"
+                        placeholder="Mot de passe.">
+                        <div class="invalid-feedback">
+                            <?= isset($errors['password']) ? $errors['password'] : '' ?>
+                        </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" name="submit"
-                            class="btn btn-primary btn">M'inscrire !
-                    </button>
+                    <input type="password" 
+                        class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
+                        name="cf-password"
+                        placeholder="Confirmer le Mot de passe.">
                 </div>
+                <button class="btn btn-block btn-dark">
+                    M'inscrire !
+                </button>
             </form>
         </div>
     </div>
 </div>
 
-<?php require_once('inc/footer.inc.php'); ?>
-
+<?php
+// Inclusion de footer.php sur la page.
+require_once(__DIR__.'/partials/footer.php');
+?>

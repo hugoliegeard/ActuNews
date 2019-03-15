@@ -1,44 +1,50 @@
-<?php require_once('inc/init.inc.php'); ?>
-
-    <!-- ----------------------------- | TRAITEMENT | ------------------------------ -->
-
 <?php
+// Inclusion de header.php sur la page.
+require_once(__DIR__.'/partials/header.php');
 
-/*
- * On affiche sur la page d'accueil
- * les 5 derniers articles de la BDD.
- */
-
-$request = $pdo_connexion->query('SELECT * FROM article ORDER BY IDARTICLE DESC LIMIT 5');
-
-$page_content .= '<div class="row">';
-
-while ($article = $request->fetch(PDO::FETCH_ASSOC)) {
-    $page_content .= '<div class="col-sm-4 mt-4">
-                          <div class="card">
-                              <div class="card-body">
-                                 <img class="card-img-top" src="./assets/images/'. $article['FEATUREDIMAGEARTICLE'] .'" alt="Card image cap">
-                                <h5 class="card-title">' . $article['TITREARTICLE'] . '</h5>
-                                <a href="article.php?id_article='.$article['IDARTICLE'].'" class="btn btn-primary">Consulter</a>
-                              </div>
-                          </div>     		
-					  </div>';
-}
-$page_content .= '</div>';
+// Récupération des articles de la base.
+$articles = getArticles();
 
 ?>
 
-    <!-- ----------------------------- | AFFICHAGE | ------------------------------ -->
+<!-- Ici, viendra le contenu de ma page -->
+<div class="p-3 mx-auto text-center">
+    <h1 class="display-4">ActuNews</h1>
+</div>
 
-<?php require_once('inc/header.inc.php'); ?>
-
+<div class="py-5 bg-light">
     <div class="container">
         <div class="row">
-            <div class="col">
-                <h1>PAGE ACCUEIL</h1>
-                <?= $page_content ?>
-            </div>
-        </div>
-    </div>
+            <?php foreach ($articles as $article) { ?>
+                <div class="col-md-4 mt-4">
+                    <div class="card shadow-sm">
+                        <img src="assets/img/article/<?= $article['image'] ?>" 
+                            class="card-img-top" 
+                            alt="<?= $article['titre'] ?>">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <?= $article['titre'] ?>
+                            </h5>
+                            <p class="card-text">
+                                <?= summarize($article['contenu']) ?>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="#" class="btn btn-primary">
+                                    Lire la suite
+                                </a>
+                                <small class="text-muted">
+                                    <?= $article['prenom'] . ' ' . $article['nom'] ?>
+                                </small>
+                            </div> <!-- /.d-flex -->
+                        </div> <!-- /.card-body -->
+                    </div> <!-- /.card -->
+                </div> <!-- /.col -->
+            <?php } // Fin du foreach $articles ?>
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+</div> <!-- /.bg-light -->
 
-<?php require_once('inc/footer.inc.php'); ?>
+<?php
+// Inclusion de footer.php sur la page.
+require_once(__DIR__.'/partials/footer.php');
+?>

@@ -1,74 +1,67 @@
-<?php require_once('inc/init.inc.php'); ?>
-
-<!-- ----------------------------- | TRAITEMENT | ------------------------------ -->
-
 <?php
+// Inclusion de header.php sur la page.
+require_once(__DIR__.'/partials/header.php');
 
-if (utilisateurEstConnecte()) {
-    header('location:index.php');
-    exit();
-}
+$email = $password = null;
 
-if ($_POST) {
-    var_dump($_POST);
+if(!empty($_POST)) {
 
-    echo "Email : " . $_POST["email"] . "<br />";
-    echo "Mot de Passe : " . $_POST["password"] . "<br />";
+    $email      = $_POST['email']; 
+    $password   = $_POST['password']; 
+    $errors = [];
 
-    $request = $pdo_connexion->query("SELECT * FROM auteur WHERE EMAILAUTEUR = '$_POST[email]'");
-    if ($request->rowCount() >= 1) {
-        $membre = $request->fetch(PDO::FETCH_ASSOC);
-        if (password_verify($_POST['password'], $membre['PASSWORDAUTEUR'])) {
-            $_SESSION['membre']['id'] = $membre['IDAUTEUR'];
-            $_SESSION['membre']['nom'] = $membre['NOMAUTEUR'];
-            $_SESSION['membre']['prenom'] = $membre['PRENOMAUTEUR'];
-            $_SESSION['membre']['email'] = $membre['EMAILAUTEUR'];
-            $_SESSION['membre']['role'] = $membre['ROLE'];
-
-            header('location:index.php');
-        } else {
-            $page_content .= '<div class="alert alert-danger" role="alert">
-                    Connexion Impossible. Vérifiez vos identifiants.</div>';
-        }
-    } else {
-        $page_content .= '<div class="alert alert-danger" role="alert">
-                Connexion Impossible. Vérifiez vos identifiants.</div>';
+    if(empty($email)) {
+        $errors['email'] = 'Vous avez oublié votre email';
     }
 
+    if(empty($password)) {
+        $errors['password'] = 'Vous avez oublié votre mot de passe';
+    }
+
+    if(empty($errors)) {
+        // -- Je procède à l'inscription en base.
+        // -- Puis redirection sur la page de connexion.
+    }
 }
+
 ?>
 
-<!-- ----------------------------- | AFFICHAGE | ------------------------------ -->
-
-<?php require_once('inc/header.inc.php'); ?>
+<div class="p-3 mx-auto text-center">
+    <h1 class="display-4">Connexion</h1>
+</div>
 
 <div class="container">
     <div class="row">
-        <div class="col">
-            <h1 class="text-center">Espace Membres</h1>
-            <h3 class="text-center">Connexion</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6">
-            <?= $page_content ?>
+        <div class="col-md-6 offset-md-3">
             <form method="POST" class="form-horizontal">
-                <div class="form-group">
-                    <input name="email"
-                           class="form-control" required type="email"
-                           placeholder="Saisissez votre Email">
+            <div class="form-group">
+                    <input type="email" 
+                        class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
+                        name="email"
+                        value="<?= $email ?>"
+                        placeholder="Email.">
+                        <div class="invalid-feedback">
+                            <?= isset($errors['email']) ? $errors['email'] : '' ?>
+                        </div>
                 </div>
                 <div class="form-group">
-                    <input name="password"
-                           class="form-control" required type="password"
-                           placeholder="Saisissez votre Mot de Passe">
+                    <input type="password" 
+                        class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
+                        name="password"
+                        placeholder="Mot de passe.">
+                        <div class="invalid-feedback">
+                            <?= isset($errors['password']) ? $errors['password'] : '' ?>
+                        </div>
                 </div>
-                <input type="submit" class="btn btn-block btn-primary" value="Connexion">
+                <button class="btn btn-block btn-dark">
+                    Connexion
+                </button>
             </form>
         </div>
     </div>
 </div>
 
-<?php require_once('inc/footer.inc.php'); ?>
-
+<?php
+// Inclusion de footer.php sur la page.
+require_once(__DIR__.'/partials/footer.php');
+?>

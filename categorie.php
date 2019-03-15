@@ -1,61 +1,64 @@
-<?php require_once('inc/init.inc.php'); ?>
-
-    <!--
-    Grâce à PHP, nous allons utiliser le même fichier
-    pour plusieurs catégories.
-
-    Avec un site statique nous aurions été obligé
-    de créer un fichier par catégorie : politique.html economie.html sports.html ...
-    -->
-
-    <!-- ----------------------------- | TRAITEMENT | ------------------------------ -->
-
 <?php
+    // Inclusion de header.php sur la page.
+    require_once(__DIR__.'/partials/header.php');
+    
+    // Récupération du nom de la catégorie dans l'URL.
+    $nom_categorie = (isset($_GET['nom_categorie'])) ? $_GET['nom_categorie'] : '';
 
-// -- Récupération de l'id de la catégorie
-$id_categorie = (isset($_GET['id_categorie'])) ? $_GET['id_categorie'] : '';
-$nom_categorie = (isset($_GET['nom_categorie'])) ? $_GET['nom_categorie'] : '';
+    // Récupération de l'ID de la catégorie dans l'URL
+    $id_categorie = (isset($_GET['id_categorie'])) ? $_GET['id_categorie'] : 0;
 
-// -- Récupération en BDD
-if (isset($_GET['id_categorie'])) {
-    $request = $pdo_connexion->query("SELECT * FROM article WHERE IDCATEGORIE = '$_GET[id_categorie]'");
-}
-
-// -- Si aucun résultat
-if ($request->rowCount() <= 0) {
-    $page_content .= '<div class="alert alert-warning">
-                            Aucune publication pour le moment.   
-                         </div>';
-} else {
-    $page_content .= '<div class="row">';
-    while ($article = $request->fetch(PDO::FETCH_ASSOC)) {
-        $page_content .= '<div class="col-sm-4 mb-4">
-                              <div class="card">
-                                  <div class="card-body">
-                                    <img class="card-img-top" src="./assets/images/'. $article['FEATUREDIMAGEARTICLE'] .'" alt="Card image cap">
-                                    <h5 class="card-title">' . $article['TITREARTICLE'] . '</h5>
-                                    <a href="article.php?id_article='.$article['IDARTICLE'].'" class="btn btn-primary">Consulter</a>
-                                  </div>
-                              </div>     		
-                          </div>';
-    }
-    $page_content .= '</div>';
-}
+    // Je récupère les articles de la catégorie
+    $articles = getArticlesByCategorieId($id_categorie);
 
 ?>
 
-    <!-- ----------------------------- | AFFICHAGE | ------------------------------ -->
+<div class="p-3 mx-auto text-center">
+    <h1 class="display-4"><?php echo $nom_categorie; ?></h1>
+</div>
 
-<?php require_once('inc/header.inc.php'); ?>
-
+<div class="py-5 bg-light">
     <div class="container">
         <div class="row">
-            <div class="col">
-                <h1 class="mb-4"><?= ucfirst($nom_categorie) ?></h1>
-                <?= $page_content ?>
-            </div>
-        </div>
-    </div>
 
-<?php require_once('inc/footer.inc.php'); ?>
+            <?php if (empty($articles)) { ?>
+                <div class="col">
+                    <div class="alert alert-warning">
+                        Aucune publication pour le moment.
+                    </div>
+                </div>
+            <?php } ?>
 
+            <?php foreach ($articles as $article) { ?>
+                <div class="col-md-4 mt-4">
+                    <div class="card shadow-sm">
+                        <img src="assets/img/article/<?= $article['image'] ?>" 
+                            class="card-img-top" 
+                            alt="<?= $article['titre'] ?>">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <?= $article['titre'] ?>
+                            </h5>
+                            <p class="card-text">
+                                <?= summarize($article['contenu']) ?>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="#" class="btn btn-primary">
+                                    Lire la suite
+                                </a>
+                                <small class="text-muted">
+                                    <?= $article['prenom'] . ' ' . $article['nom'] ?>
+                                </small>
+                            </div> <!-- /.d-flex -->
+                        </div> <!-- /.card-body -->
+                    </div> <!-- /.card -->
+                </div> <!-- /.col -->
+            <?php } // Fin du foreach $articles ?>
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+</div> <!-- /.bg-light -->
+
+<?php
+// Inclusion de footer.php sur la page.
+require_once(__DIR__.'/partials/footer.php');
+?>
